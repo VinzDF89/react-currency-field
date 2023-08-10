@@ -1,80 +1,133 @@
-import React, { Ref, forwardRef, useDeferredValue, useEffect, useImperativeHandle, useRef } from "react"
+import React, { Ref, forwardRef, useDeferredValue, useEffect, useImperativeHandle, useRef, useState } from "react"
 import LocaleNumber from "../utilities/LocaleNumber"
 
 type CurrencyFieldProps = {
     locale?: string,
     currency?: string,
-    decimals?: string
+    decimals?: number,
+    max?: number
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-const CurrencyField = forwardRef(({
-        currency = '$',
-        decimals = '2',
-        ...props
-    }: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
+const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999, ...props}: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
     const inputField = useRef<HTMLInputElement>(null);
+    const prevPosition = useRef<number>(0);
+    const [forceCursor, setForceCursor] = useState<boolean>(false);
     useImperativeHandle(ref, () => inputField.current as HTMLInputElement);
 
     const locale = new LocaleNumber(props.locale);
     const decimalSeparator = locale.getDecimalSeparator();
 
+    // Formats the initial number given to the component and triggers and onInput event to complete the update
     useEffect(() => {
         if (inputField.current && props.value) {
             const newNumber = locale.cleanNumber(inputField.current.value);
             inputField.current.value = inputField.current.value.length
-                ? locale.getFormattedValue(newNumber, Number(decimals)) : '';
+                ? locale.getFormattedValue(newNumber, decimals) : '';
             inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
         }
     }, [])
 
+    // Whenever "forceCursor" changes, a new setting of the keyboard cursor should be made
+    useEffect(() => {
+        if (!inputField.current) {
+            return;
+        }
+
+        inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
+    }, [forceCursor])
+
     let prevString = useDeferredValue<string | undefined>(props.value ? props.value.toString() : '');
     const preventFormatting = useRef<boolean>(false);
 
+    // Establishes whether the logic of the next onInput event should prevent formatting the value
     const onKeyDownFunction = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (!inputField.current) {
             return;
         }
 
+        const selectionStart = inputField.current.selectionStart ?? 0;
+        const decimalSepPos = inputField.current.value.indexOf(decimalSeparator);
+
         preventFormatting.current
             = (
-                e.key === decimalSeparator
-                && Number(decimals) > 0 
-                && inputField.current!.selectionStart === inputField.current!.value.length
+                (
+                    (
+                        e.key === decimalSeparator && decimalSepPos === -1
+                        || e.key === 'Backspace' && decimalSepPos > -1
+                    ) || (
+                        !isNaN(Number(e.key))
+                        && decimalSepPos > -1
+                        && selectionStart > decimalSepPos
+                    )
+                )
+                && decimals > 0
+                && selectionStart === inputField.current.value.length
                 && inputField.current.value.length > 0
             );
+        
     }
 
     const onInputFunction = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!inputField.current) {
+            return;
+        }
+
+        // Checks whether it should not format the input value
         if (preventFormatting.current) {
+            const [integerNumber, newNumberDecimals] = inputField.current.value.split(decimalSeparator);
+            if (newNumberDecimals !== undefined && newNumberDecimals.length > decimals) {
+                inputField.current.value = integerNumber + decimalSeparator + newNumberDecimals.slice(0, -1);
+            }
+
             if (props.onChange) {
                 props.onChange(e);
+            } else {
+                prevPosition.current = prevPosition.current - 1;
             }
 
             return;
         }
 
-        if (inputField.current) {
-            const prevPosition = inputField.current.selectionStart ?? 0;
+        prevPosition.current = inputField.current.selectionStart ?? 0;
 
-            const newNumber = locale.cleanNumber(inputField.current.value);
-            inputField.current.value = inputField.current.value.length
-                ? locale.getFormattedValue(newNumber, Number(decimals)) : '';
-            
-            const prevOffset = prevString ? prevString.length : 0;
-            const newOffset = inputField.current.value.length;
-            const difference = prevOffset - newOffset;
-            if (props.onChange) {
-                props.onChange(e);
+        // Checks whether the new number exceeds the maximum limit
+        const newNumber = locale.cleanNumber(inputField.current.value);
+        if (newNumber > max) {
+            setForceCursor(!forceCursor);
+
+            if (!props.onChange) {
+                inputField.current.value = prevString ?? ''
+                inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current - 1;
             } else {
-                prevString = inputField.current.value;
+                prevPosition.current = prevPosition.current - 1;
             }
 
-            if (Math.abs(difference) === 2 && prevPosition - 1 > 0) {
-                const newPosition = difference > 0 ? prevPosition - 1 : prevPosition + 1;
-                inputField.current.selectionStart = inputField.current.selectionEnd = newPosition;
-            } else {
-                inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition;
-            }
+            return;
+        }
+
+        // Formats the new value string as currency
+        inputField.current.value = inputField.current.value.length
+            ? locale.getFormattedValue(newNumber, decimals) : '';
+        
+
+        // Calculates the difference between previous and next value string
+        const prevOffset = prevString ? prevString.length : 0;
+        const newOffset = inputField.current.value.length;
+        const difference = prevOffset - newOffset;
+
+        // Updates the value bound to the field, or manually updates the new previous value string
+        if (props.onChange) {
+            props.onChange(e);
+        } else {
+            prevString = inputField.current.value;
+        }
+
+        // Adjusts keyboard's cursor in the field
+        if (Math.abs(difference) === 2 && prevPosition.current - 1 > 0) {
+            const newPosition = difference > 0 ? prevPosition.current - 1 : prevPosition.current + 1;
+            inputField.current.selectionStart = inputField.current.selectionEnd = newPosition;
+        } else {
+            inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
         }
     }
 
