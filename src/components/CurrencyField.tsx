@@ -5,10 +5,14 @@ type CurrencyFieldProps = {
     locale?: string,
     currency?: string,
     decimals?: number,
-    max?: number
+    max?: number,
+    min?: number,
+    onNumericalChange?: (newValue: number) => void,
+    onMaxFails?: (newValue: boolean) => void,
+    onMinFails?: (newValue: boolean) => void
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999, ...props}: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
+const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999, min = 0, ...props}: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
     const inputField = useRef<HTMLInputElement>(null);
     const prevPosition = useRef<number>(0);
     const [forceCursor, setForceCursor] = useState<boolean>(false);
@@ -18,12 +22,22 @@ const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999
     const decimalSeparator = locale.getDecimalSeparator();
 
     // Formats the initial number given to the component and triggers and onInput event to complete the update
+    // and checks the other attributes
     useEffect(() => {
         if (inputField.current && props.value) {
-            const newNumber = locale.cleanNumber(inputField.current.value);
+            let newNumber = locale.cleanNumber(inputField.current.value);
+
+            if (newNumber < min) {
+                newNumber = min;
+            }
+
             inputField.current.value = inputField.current.value.length
                 ? locale.getFormattedValue(newNumber, decimals) : '';
             inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        if (max <= min) {
+            console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
         }
     }, [])
 
@@ -85,6 +99,11 @@ const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999
                 prevPosition.current = prevPosition.current - 1;
             }
 
+            // Updates the numerical value
+            if (props.onNumericalChange) {
+                props.onNumericalChange(locale.cleanNumber(inputField.current.value));
+            }
+
             return;
         }
 
@@ -92,7 +111,11 @@ const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999
 
         // Checks whether the new number exceeds the maximum limit
         const newNumber = locale.cleanNumber(inputField.current.value);
-        if (newNumber > max) {
+        if (max > min && newNumber > max) {
+            if (props.onMaxFails) {
+                props.onMaxFails(true);
+            }
+
             setForceCursor(!forceCursor);
 
             if (!props.onChange) {
@@ -103,6 +126,21 @@ const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999
             }
 
             return;
+        } else {
+            if (props.onMaxFails) {
+                props.onMaxFails(false);
+            }
+
+            // Checks whether the new number doesn't reach the minimum limit
+            if (newNumber < min) {
+                if (props.onMinFails) {
+                    props.onMinFails(true);
+                }
+            } else {
+                if (props.onMinFails) {
+                    props.onMinFails(false);
+                }
+            }
         }
 
         // Formats the new value string as currency
@@ -120,6 +158,11 @@ const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999
             props.onChange(e);
         } else {
             prevString = inputField.current.value;
+        }
+
+        // Updates the numerical value
+        if (props.onNumericalChange) {
+            props.onNumericalChange(newNumber);
         }
 
         // Adjusts keyboard's cursor in the field
