@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import CurrencyField from './components'
+import './App.css'
 
 function App() {
     const initialAmount = "5000";
@@ -28,7 +29,7 @@ function App() {
     }
 
     return (
-        <>
+        <div>
             <CurrencyField value={amount} onChange={changeAmount} 
                 onNumericalChange={changeNumericalAmount}
                 max={maxLimit} min={minLimit} onMaxFails={changeMaxLimitExceeded} onMinFails={changeMinLimitNotReached}
@@ -37,7 +38,7 @@ function App() {
             <p>Current numerical value is: {numericalAmount}</p>
             <p>Max limit of {maxLimit} exceeded: {maxLimitExceeded ? 'true' : 'false'}</p>
             <p>Min limit of {minLimit} not reached: {minLimitNotReached ? 'true': 'false'}</p>
-        </>
+        </div>
     )
 }
 

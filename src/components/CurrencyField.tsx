@@ -7,12 +7,39 @@ type CurrencyFieldProps = {
     decimals?: number,
     max?: number,
     min?: number,
+    disableAutoCurrencyPositioning?: boolean,
     onNumericalChange?: (newValue: number) => void,
     onMaxFails?: (newValue: boolean) => void,
     onMinFails?: (newValue: boolean) => void
 } & React.InputHTMLAttributes<HTMLInputElement>
 
-const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999, min = 0, ...props}: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
+const setCurrencyLabelPosition = (inputField?: HTMLInputElement) => {
+    if (!inputField || inputField.hasAttribute('data-currency-positioned')) {
+        return;
+    }
+
+    inputField.setAttribute('data-currency-positioned', 'true');
+
+    const wrapper = inputField.parentElement as HTMLElement;
+    const currency = wrapper!.firstElementChild as HTMLElement;
+    const currencyOffset = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 2;
+    const inputPadding = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 3;
+
+    wrapper.style.transform = `translateX(-${currency!.offsetWidth}px)`;
+    currency.style.display = 'inline-block';
+    currency.style.transform = `translateX(${currencyOffset}px)`;
+    inputField.style.paddingLeft = `${inputPadding}px`;
+}
+
+const CurrencyField = forwardRef(({
+        currency = '$',
+        decimals = 2,
+        max = 999999999,
+        min = 0,
+        disableAutoCurrencyPositioning = false,
+        ...props
+    }: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
+
     const inputField = useRef<HTMLInputElement>(null);
     const prevPosition = useRef<number>(0);
     const [forceCursor, setForceCursor] = useState<boolean>(false);
@@ -24,7 +51,15 @@ const CurrencyField = forwardRef(({currency = '$', decimals = 2, max = 999999999
     // Formats the initial number given to the component and triggers and onInput event to complete the update
     // and checks the other attributes
     useEffect(() => {
-        if (inputField.current && props.value) {
+        if (!inputField.current) {
+            return;
+        }
+
+        if (!disableAutoCurrencyPositioning) {
+            setCurrencyLabelPosition(inputField.current);
+        }
+
+        if (props.value) {
             let newNumber = locale.cleanNumber(inputField.current.value);
 
             if (newNumber < min) {
