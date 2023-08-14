@@ -98,21 +98,6 @@ const CurrencyField = forwardRef(({
     const onInputFunction = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!inputField.current) return;
 
-        // Checks whether it should not format the input value
-        if (preventFormatting.current) {
-            const [integerNumber, newNumberDecimals] = inputField.current.value.split(decimalSeparator);
-            if (newNumberDecimals !== undefined && newNumberDecimals.length > decimals) {
-                inputField.current.value = integerNumber + decimalSeparator + newNumberDecimals.slice(0, -1);
-            }
-
-            props.onChange ? props.onChange(e) : prevPosition.current = prevPosition.current - 1;
-
-            // Updates the numerical value
-            props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
-
-            return;
-        }
-
         prevPosition.current = inputField.current.selectionStart ?? 0;
 
         // Checks whether the new number exceeds the maximum limit
@@ -138,6 +123,21 @@ const CurrencyField = forwardRef(({
                 newNumber < min && props.onMinFails(true);
                 newNumber >= min && props.onMinFails(false);
             }
+        }
+
+        // Checks whether it should not format the input value
+        if (preventFormatting.current) {
+            const [integerNumber, newNumberDecimals] = inputField.current.value.split(decimalSeparator);
+            if (newNumberDecimals !== undefined && newNumberDecimals.length > decimals) {
+                inputField.current.value = integerNumber + decimalSeparator + newNumberDecimals.slice(0, -1);
+            }
+
+            props.onChange ? props.onChange(e) : prevPosition.current = prevPosition.current - 1;
+
+            // Updates the numerical value
+            props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
+
+            return;
         }
 
         // Formats the new value string as currency
