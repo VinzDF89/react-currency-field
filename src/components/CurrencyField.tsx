@@ -108,8 +108,10 @@ const CurrencyField = forwardRef(({
             setForceCursor(!forceCursor);
 
             if (!props.onChange) {
+                prevPosition.current = prevPosition.current - 1;
+
                 inputField.current.value = prevString ?? ''
-                inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current - 1;
+                inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
             } else {
                 prevPosition.current = prevPosition.current - 1;
             }
