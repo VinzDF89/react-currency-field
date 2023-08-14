@@ -95,6 +95,19 @@ const CurrencyField = forwardRef(({
         );
     }
 
+    // Checks whether the value has exceeded the maximum value allowed when losing the focus of the field
+    // and in case reset the maximum flag
+    const onBlurFunction = (e: React.FocusEvent<HTMLInputElement>) => {
+        if (!inputField.current) return;
+
+        const newNumber = locale.cleanNumber(inputField.current.value);
+        if (max > min && newNumber <= max) {
+            props.onMaxFails && props.onMaxFails(false);
+        }
+
+        props.onBlur && props.onBlur(e);
+    }
+
     const onInputFunction = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!inputField.current) return;
 
@@ -175,8 +188,9 @@ const CurrencyField = forwardRef(({
                 id="initialAmount"
                 placeholder={props.placeholder}
                 value={props.value}
-                onKeyDown={onKeyDownFunction}
                 onInput={onInputFunction}
+                onKeyDown={onKeyDownFunction}
+                onBlur={onBlurFunction}
                 className="!pl-7"
             />
         </div>
