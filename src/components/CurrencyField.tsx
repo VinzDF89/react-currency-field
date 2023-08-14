@@ -40,7 +40,7 @@ const CurrencyField = forwardRef(({
 
     const inputField = useRef<HTMLInputElement>(null);
     const prevPosition = useRef<number>(0);
-    let prevString = useDeferredValue<string | undefined>(props.value ? props.value.toString() : '');
+    let prevString = useDeferredValue<string | undefined>(inputField.current?.value);
     const preventFormatting = useRef<boolean>(false);
     const [forceCursor, setForceCursor] = useState<boolean>(false);
     useImperativeHandle(ref, () => inputField.current as HTMLInputElement);
