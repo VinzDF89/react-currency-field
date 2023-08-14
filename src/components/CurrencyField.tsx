@@ -14,9 +14,7 @@ type CurrencyFieldProps = {
 } & React.InputHTMLAttributes<HTMLInputElement>
 
 const setCurrencyLabelPosition = (inputField?: HTMLInputElement) => {
-    if (!inputField || inputField.hasAttribute('data-currency-positioned')) {
-        return;
-    }
+    if (!inputField || inputField.hasAttribute('data-currency-positioned')) return;
 
     inputField.setAttribute('data-currency-positioned', 'true');
 
@@ -42,6 +40,8 @@ const CurrencyField = forwardRef(({
 
     const inputField = useRef<HTMLInputElement>(null);
     const prevPosition = useRef<number>(0);
+    let prevString = useDeferredValue<string | undefined>(props.value ? props.value.toString() : '');
+    const preventFormatting = useRef<boolean>(false);
     const [forceCursor, setForceCursor] = useState<boolean>(false);
     useImperativeHandle(ref, () => inputField.current as HTMLInputElement);
 
@@ -51,13 +51,9 @@ const CurrencyField = forwardRef(({
     // Formats the initial number given to the component and triggers and onInput event to complete the update
     // and checks the other attributes
     useEffect(() => {
-        if (!inputField.current) {
-            return;
-        }
+        if (!inputField.current) return;
 
-        if (!disableAutoCurrencyPositioning) {
-            setCurrencyLabelPosition(inputField.current);
-        }
+        !disableAutoCurrencyPositioning && setCurrencyLabelPosition(inputField.current);
 
         if (props.value) {
             let newNumber = locale.cleanNumber(inputField.current.value);
@@ -71,55 +67,36 @@ const CurrencyField = forwardRef(({
             inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
-        if (max <= min) {
-            console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
-        }
+        max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
     }, [])
 
     // Whenever "forceCursor" changes, a new setting of the keyboard cursor should be made
     useEffect(() => {
-        if (!inputField.current) {
-            return;
-        }
+        if (!inputField.current) return;
 
         inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
     }, [forceCursor])
 
-    let prevString = useDeferredValue<string | undefined>(props.value ? props.value.toString() : '');
-    const preventFormatting = useRef<boolean>(false);
-
     // Establishes whether the logic of the next onInput event should prevent formatting the value
     const onKeyDownFunction = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (!inputField.current) {
-            return;
-        }
+        if (!inputField.current) return;
 
         const selectionStart = inputField.current.selectionStart ?? 0;
         const decimalSepPos = inputField.current.value.indexOf(decimalSeparator);
 
-        preventFormatting.current
-            = (
-                (
-                    (
-                        e.key === decimalSeparator && decimalSepPos === -1
-                        || e.key === 'Backspace' && decimalSepPos > -1
-                    ) || (
-                        !isNaN(Number(e.key))
-                        && decimalSepPos > -1
-                        && selectionStart > decimalSepPos
-                    )
-                )
-                && decimals > 0
-                && selectionStart === inputField.current.value.length
-                && inputField.current.value.length > 0
-            );
-        
+        preventFormatting.current = (
+            (
+                (e.key === decimalSeparator && decimalSepPos === -1 || e.key === 'Backspace' && decimalSepPos > -1) 
+                || (!isNaN(Number(e.key)) && decimalSepPos > -1 && selectionStart > decimalSepPos)
+            )
+            && decimals > 0
+            && selectionStart === inputField.current.value.length
+            && inputField.current.value.length > 0
+        );
     }
 
     const onInputFunction = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (!inputField.current) {
-            return;
-        }
+        if (!inputField.current) return;
 
         // Checks whether it should not format the input value
         if (preventFormatting.current) {
@@ -128,16 +105,10 @@ const CurrencyField = forwardRef(({
                 inputField.current.value = integerNumber + decimalSeparator + newNumberDecimals.slice(0, -1);
             }
 
-            if (props.onChange) {
-                props.onChange(e);
-            } else {
-                prevPosition.current = prevPosition.current - 1;
-            }
+            props.onChange ? props.onChange(e) : prevPosition.current = prevPosition.current - 1;
 
             // Updates the numerical value
-            if (props.onNumericalChange) {
-                props.onNumericalChange(locale.cleanNumber(inputField.current.value));
-            }
+            props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
 
             return;
         }
@@ -147,9 +118,7 @@ const CurrencyField = forwardRef(({
         // Checks whether the new number exceeds the maximum limit
         const newNumber = locale.cleanNumber(inputField.current.value);
         if (max > min && newNumber > max) {
-            if (props.onMaxFails) {
-                props.onMaxFails(true);
-            }
+            props.onMaxFails && props.onMaxFails(true);
 
             setForceCursor(!forceCursor);
 
@@ -162,19 +131,12 @@ const CurrencyField = forwardRef(({
 
             return;
         } else {
-            if (props.onMaxFails) {
-                props.onMaxFails(false);
-            }
+            props.onMaxFails && props.onMaxFails(false);
 
             // Checks whether the new number doesn't reach the minimum limit
-            if (newNumber < min) {
-                if (props.onMinFails) {
-                    props.onMinFails(true);
-                }
-            } else {
-                if (props.onMinFails) {
-                    props.onMinFails(false);
-                }
+            if (props.onMinFails) {
+                newNumber < min && props.onMinFails(true);
+                newNumber >= min && props.onMinFails(false);
             }
         }
 
@@ -189,16 +151,10 @@ const CurrencyField = forwardRef(({
         const difference = prevOffset - newOffset;
 
         // Updates the value bound to the field, or manually updates the new previous value string
-        if (props.onChange) {
-            props.onChange(e);
-        } else {
-            prevString = inputField.current.value;
-        }
+        props.onChange ? props.onChange(e) : prevString = inputField.current.value;
 
         // Updates the numerical value
-        if (props.onNumericalChange) {
-            props.onNumericalChange(newNumber);
-        }
+        props.onNumericalChange && props.onNumericalChange(newNumber);
 
         // Adjusts keyboard's cursor in the field
         if (Math.abs(difference) === 2 && prevPosition.current - 1 > 0) {
