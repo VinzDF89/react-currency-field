@@ -31,7 +31,7 @@ class LocaleNumber
         
         let result = '0';
         if (integer.length && decimal.length) {
-            result = integer + separator + decimal;
+            result = integer + '.' + decimal;
         } else if (integer.length) {
             result = integer;
         } else if (decimal.length) {

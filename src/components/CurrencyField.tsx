@@ -180,7 +180,7 @@ const CurrencyField = forwardRef(({
         props.onChange ? props.onChange(e) : prevString = inputField.current.value;
 
         // Updates the numerical value
-        props.onNumericalChange && props.onNumericalChange(newNumber);
+        props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
 
         // Adjusts keyboard's cursor in the field
         if (Math.abs(difference) === 2 && prevPosition.current - 1 > 0) {
