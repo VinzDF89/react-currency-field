@@ -2,6 +2,17 @@ import React, { Ref, forwardRef, useDeferredValue, useEffect, useImperativeHandl
 import LocaleNumber from "../utilities/LocaleNumber"
 
 type CurrencyFieldProps = {
+    // Input attributes
+    ref?: Ref<HTMLInputElement>,
+    id?: string,
+    name?: string,
+    value?: string,
+    placeholder?: string,
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void,
+    className?: string,
+
+    // Custom attributes
     locale?: string,
     currency?: string,
     decimals?: number,
@@ -11,7 +22,7 @@ type CurrencyFieldProps = {
     onNumericalChange?: (newValue: number) => void,
     onMaxFails?: (newValue: boolean) => void,
     onMinFails?: (newValue: boolean) => void
-} & React.InputHTMLAttributes<HTMLInputElement>
+}
 
 const setCurrencyLabelPosition = (inputField?: HTMLInputElement) => {
     if (!inputField || inputField.hasAttribute('data-currency-positioned')) return;
@@ -185,13 +196,14 @@ const CurrencyField = forwardRef(({
             <span>{currency}</span>
             <input type="text"
                 ref={inputField}
-                id="initialAmount"
+                id={props.id}
+                name={props.name}
                 placeholder={props.placeholder}
                 value={props.value}
                 onInput={onInputFunction}
                 onKeyDown={onKeyDownFunction}
                 onBlur={onBlurFunction}
-                className="!pl-7"
+                className={props.className}
             />
         </div>
     )
