@@ -6,12 +6,10 @@ class LocaleNumber
         this.locale = locale ?? navigator.language ?? 'en-US';
     }
 
-    public getFormattedValue(number: string | number, decimals = 2): string {
-        const newNumber = this.cleanNumber(number);
-
+    public getFormattedValue(number: number, decimals = 2): string {
         return Intl.NumberFormat(this.locale, {
             maximumFractionDigits: decimals
-        }).format(Number(newNumber.toFixed(decimals + 1).slice(0, -1)));
+        }).format(Number(number.toFixed(decimals + 1).slice(0, -1)));
     }
 
     public getGroupSeparator(): string {
@@ -22,7 +20,11 @@ class LocaleNumber
         return this.getSeparator('decimal') ?? '.';
     }
 
-    public cleanNumber(number: string | number): number {
+    public cleanNumber(number: string): number {
+        if (!isNaN(Number(number))) {
+            return Number(number);
+        }
+
         const separator = this.getDecimalSeparator();
         let [integer, decimal] = number.toString().split(separator);
 
