@@ -3,11 +3,11 @@ import CurrencyField from './components'
 import './App.css'
 
 function App() {
-    const initialAmount = "5000";
+    const initialAmount = 5000;
     const maxLimit = 200000;
     const minLimit = 1000;
 
-    const [amount, setAmount] = useState<string>(initialAmount);
+    const [amount, setAmount] = useState<string | number>(initialAmount);
     const [numericalAmount, setNumericalAmount] = useState<number>(Number(initialAmount));
     const [maxLimitExceeded, setMaxLimitExceeded] = useState<boolean>(false);
     const [minLimitNotReached, setMinLimitNotReached] = useState<boolean>(false);

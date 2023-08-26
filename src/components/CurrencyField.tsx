@@ -6,7 +6,7 @@ type CurrencyFieldProps = {
     ref?: Ref<HTMLInputElement>,
     id?: string,
     name?: string,
-    value?: string,
+    value?: string | number,
     placeholder?: string,
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void,
@@ -67,7 +67,7 @@ const CurrencyField = forwardRef(({
         !disableAutoCurrencyPositioning && setCurrencyLabelPosition(inputField.current);
 
         if (props.value) {
-            let newNumber = locale.cleanNumber(inputField.current.value);
+            let newNumber = locale.cleanNumber(props.value);
 
             if (newNumber < min) {
                 newNumber = min;

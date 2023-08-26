@@ -20,12 +20,8 @@ class LocaleNumber
         return this.getSeparator('decimal') ?? '.';
     }
 
-    public cleanNumber(number: string): number {
-        if (!isNaN(Number(number))) {
-            return Number(number);
-        }
-
-        const separator = this.getDecimalSeparator();
+    public cleanNumber(number: string | number): number {
+        const separator = typeof number === 'number' ? '.' : this.getDecimalSeparator();
         let [integer, decimal] = number.toString().split(separator);
 
         integer = integer !== undefined ? integer.replaceAll(/\D/g, '') : '';
