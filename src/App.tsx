@@ -35,11 +35,17 @@ function App() {
             <Header />
 
             <div className="container">
-                <CurrencyField value={amount} onChange={changeAmount} 
-                    onNumericalChange={changeNumericalAmount}
-                    locale="en-US"
-                    max={maxLimit} min={minLimit} onMaxFails={changeMaxLimitExceeded} onMinFails={changeMinLimitNotReached}
-                />
+                <div>
+                    <CurrencyField value={amount} onChange={changeAmount} 
+                        onNumericalChange={changeNumericalAmount}
+                        locale="en-US"
+                        max={maxLimit} min={minLimit} onMaxFails={changeMaxLimitExceeded} onMinFails={changeMinLimitNotReached}
+                    />
+                    <span className="fieldWarning">
+                        {maxLimitExceeded && 'Max limit exceeded!'}
+                        {minLimitNotReached && 'Min limit not reached!'}
+                    </span>
+                </div>
                 <FieldDataInfo
                     amount={amount.toString()}
                     numericalAmount={numericalAmount}

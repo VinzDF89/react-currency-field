@@ -47,10 +47,16 @@ input {
     color: blue;
 }
 
-.true {
+.fieldWarning {
+    display: block;
+    min-height: 20px;
+    color: red;
+}
+
+.success {
     color: green;
 }
 
-.false {
+.warning {
     color: red;
 }
