@@ -10,6 +10,7 @@ type CurrencyFieldProps = {
     placeholder?: string,
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void,
+    onPaste?: (e: React.ClipboardEvent<HTMLInputElement>) => void,
     className?: string,
 
     // Custom attributes
@@ -53,6 +54,7 @@ const CurrencyField = forwardRef(({
     const prevPosition = useRef<number>(0);
     let prevString = useDeferredValue<string | undefined>(inputField.current?.value);
     const preventFormatting = useRef<boolean>(false);
+    const isPasted = useRef<boolean>(false);
     const [forceCursor, setForceCursor] = useState<boolean>(false);
     useImperativeHandle(ref, () => inputField.current as HTMLInputElement);
 
@@ -87,6 +89,14 @@ const CurrencyField = forwardRef(({
 
         inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
     }, [forceCursor])
+
+    const onPasteFunction = (e: React.ClipboardEvent<HTMLInputElement>) => {
+        if (!inputField.current) return;
+
+        isPasted.current = true;
+
+        props.onPaste && props.onPaste(e);
+    }
 
     // Establishes whether the logic of the next onInput event should prevent formatting the value
     const onKeyDownFunction = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -186,6 +196,12 @@ const CurrencyField = forwardRef(({
         // Updates the numerical value
         props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
 
+        if (isPasted.current) {
+            isPasted.current = false;
+        
+            return inputField.current.selectionStart = inputField.current.selectionEnd = inputField.current.value.length;
+        }
+
         // Adjusts keyboard's cursor in the field
         if (Math.abs(difference) === 2 && prevPosition.current - 1 > 0) {
             const newPosition = difference > 0 ? prevPosition.current - 1 : prevPosition.current + 1;
@@ -209,6 +225,7 @@ const CurrencyField = forwardRef(({
                 onInput={onInputFunction}
                 onKeyDown={onKeyDownFunction}
                 onBlur={onBlurFunction}
+                onPaste={onPasteFunction}
                 className={props.className}
             />
         </div>
