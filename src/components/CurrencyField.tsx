@@ -206,7 +206,7 @@ const CurrencyField = forwardRef(({
         if (Math.abs(difference) === 2 && prevPosition.current - 1 > 0) {
             const newPosition = difference > 0 ? prevPosition.current - 1 : prevPosition.current + 1;
             inputField.current.selectionStart = inputField.current.selectionEnd = newPosition;
-        } else if (difference === 0) {
+        } else if (difference === 0 && prevString != inputField.current.value) {
             inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current - 1;
         } else {
             inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
