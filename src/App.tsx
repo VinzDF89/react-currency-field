@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import CurrencyField from './components/CurrencyField'
 import FieldDataInfo from './components/FieldDataInfo'
 import './App.css'
@@ -10,7 +11,7 @@ function App() {
     const minLimit = 1000;
 
     const [amount, setAmount] = useState<string | number>(initialAmount);
-    const [numericalAmount, setNumericalAmount] = useState<number>(Number(initialAmount));
+    const [numericalAmount, setNumericalAmount] = useState<number>(initialAmount);
     const [maxLimitExceeded, setMaxLimitExceeded] = useState<boolean>(false);
     const [minLimitNotReached, setMinLimitNotReached] = useState<boolean>(false);
 
@@ -34,7 +35,7 @@ function App() {
         <>
             <Header />
 
-            <div className="container">
+            <div className="main container">
                 <div>
                     <CurrencyField value={amount} onChange={changeAmount} 
                         onNumericalChange={changeNumericalAmount}
@@ -56,6 +57,8 @@ function App() {
                     minLimitNotReached={minLimitNotReached}
                 />
             </div>
+
+            <Footer />
         </>
     )
 }
