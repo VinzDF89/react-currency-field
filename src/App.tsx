@@ -40,6 +40,7 @@ function App() {
                         onNumericalChange={changeNumericalAmount}
                         locale="en-US"
                         max={maxLimit} min={minLimit} onMaxFails={changeMaxLimitExceeded} onMinFails={changeMinLimitNotReached}
+                        className={maxLimitExceeded || minLimitNotReached ? 'redBorder' : ''}
                     />
                     <span className="fieldWarning">
                         {maxLimitExceeded && 'Max limit exceeded!'}
