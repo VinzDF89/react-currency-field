@@ -5,6 +5,7 @@
   "keywords": ["currency", "field", "react"],
   "version": "1.0.0",
   "type": "module",
+  "repository": "https://github.com/VinzDF89/react-currency-field",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
