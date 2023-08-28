@@ -5,7 +5,7 @@ where the value directly typed by the user is automatically formatted in the loc
 
 ## Installation
 ```
-npm i ...
+npm i @vinzdf89/react-currency-field
 ```
 
 ## Example

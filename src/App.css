@@ -14,6 +14,14 @@ h1 {
     margin-bottom: 0px;
 }
 
+a {
+    color: blue;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
 .container {
     max-width: 400px;
     text-align: left;
