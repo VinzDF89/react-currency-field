@@ -1,5 +1,7 @@
 # React Currency Field
 
+![Image](image.gif)
+
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
