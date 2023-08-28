@@ -2,8 +2,12 @@
   "name": "@vinzdf89/react-currency-field",
   "description": "React Currency Field",
   "author": "Vincenzo De Falco | www.vincenzodefalco.com",
-  "keywords": ["currency", "field", "react"],
-  "version": "1.0.0",
+  "keywords": [
+    "currency",
+    "field",
+    "react"
+  ],
+  "version": "1.0.1",
   "type": "module",
   "repository": "https://github.com/VinzDF89/react-currency-field",
   "scripts": {
