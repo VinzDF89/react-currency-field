@@ -1,7 +1,32 @@
 import { defineConfig } from 'vite'
+import path from 'node:path';
 import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+        react(),
+        dts({
+            insertTypesEntry: true,
+            rollupTypes: true
+        }),
+    ],
+    build: {
+        lib: {
+            entry: path.resolve(__dirname, 'src/components/index.ts'),
+            name: 'CurrencyField',
+            formats: ['es', 'umd'],
+            fileName: (format) => `currency-field.${format}.js`,
+        },
+        rollupOptions: {
+            external: ['react', 'react-dom'],
+            output: {
+                globals: {
+                    react: 'React',
+                    'react-dom': 'ReactDOM'
+                },
+            },
+        },
+    },
 })

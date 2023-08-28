@@ -1,7 +1,9 @@
 {
-  "name": "react-currency-field",
-  "private": true,
-  "version": "0.1.0",
+  "name": "@vinzdf89/react-currency-field",
+  "description": "React Currency Field",
+  "author": "Vincenzo De Falco | www.vincenzodefalco.com",
+  "keywords": ["currency", "field", "react"],
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -37,6 +39,19 @@
     "jest-transform-stub": "^2.0.0",
     "ts-jest": "^29.1.1",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.5.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/currency-field.umd.js",
+  "module": "./dist/currency-field.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/currency-field.es.js",
+      "require": "./dist/currency-field.umd.js",
+      "types": "./dist/index.d.ts"
+    }
   }
 }
