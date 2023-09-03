@@ -16,7 +16,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "jest",
-    "prepublish": "rm -rf ./dist && npm run build"
+    "prepublishOnly": "rm -rf ./dist && npm run build"
   },
   "peerDependencies": {
     "react": "^18.2.0",
