@@ -36,7 +36,7 @@ const setCurrencyLabelPosition = (inputField?: HTMLInputElement) => {
     const currencyOffset = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 2;
     const inputPadding = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 3;
 
-    wrapper.style.transform = `translateX(-${currency!.offsetWidth}px)`;
+    wrapper.style.marginLeft = `-${currency!.offsetWidth}px`;
     currency.style.display = 'inline-block';
     currency.style.transform = `translateX(${currencyOffset}px)`;
     inputField.style.paddingLeft = `${inputPadding}px`;
