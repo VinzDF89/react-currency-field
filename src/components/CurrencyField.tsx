@@ -71,14 +71,8 @@ const CurrencyField = forwardRef(({
         !disableAutoCurrencyPositioning && setCurrencyLabelPosition(inputField.current);
 
         if (props.value) {
-            let newNumber = locale.cleanNumber(props.value);
-
-            if (newNumber < min) {
-                newNumber = min;
-            }
-
             inputField.current.value = inputField.current.value.length
-                ? locale.getFormattedValue(newNumber, decimals) : '';
+                ? props.value.toString() : '';
             inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
         } else if (props.numericalValue) {
             inputField.current.value = props.numericalValue.toString();

@@ -21,7 +21,11 @@ class LocaleNumber
     }
 
     public cleanNumber(number: string | number): number {
-        const separator = typeof number === 'number' ? '.' : this.getDecimalSeparator();
+        if (typeof number === 'number') {
+            return number;
+        }
+
+        const separator = this.getDecimalSeparator();
         let [integer, decimal] = number.toString().split(separator);
 
         integer = integer !== undefined ? integer.replaceAll(/\D/g, '') : '';
