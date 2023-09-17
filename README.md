@@ -5,6 +5,12 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
+## 1.1.0 minor release notes
+- Added the more generic "symbol" attribute to use instead of "currency", which is now marked as deprecated.
+- Added the new "symbolPosition" attribute, which allows to move the symbol after the field if set to "end" (default is "start").
+- Small optimization on keyboard cursor's positioning.
+- Code refactoring.
+
 ## Installation
 ```
 npm i @vinzdf89/react-currency-field
@@ -44,7 +50,7 @@ function App() {
 export default App;
 ```
 
-A more complex example can be found in the App.tsx file of this package.
+A more complex example can be found in the App.tsx file from the [GitHub project](https://github.com/VinzDF89/react-currency-field).
 
 ## Attributes / Properties
 
@@ -60,7 +66,8 @@ A more complex example can be found in the App.tsx file of this package.
 | **onPaste** | (e: React.ClipboardEvent<HTMLInputElement>) => void | undefined | For setting a custom event handler on "paste" event, which will be executed after the internal handler has run. |
 | **className** | string | undefined | Used to set classes to the input field. |
 | **locale** | string | undefined | Set the number format. If the attribute is not provided, the format will be fetched from the browser's language preferences. If even this fails, it will be set to 'en-US'. |
-| **currency** | string | '$' | Set the currency symbol to use. |
+| **symbol** | string | '$' | Set the currency symbol to use. |
+| **symbolPosition** | 'start' \| 'end' | 'start' | Move the symbol before or after the input field. |
 | **decimals** | number | 2 | Number of decimals allowed. |
 | **max** | number | 999999999 | The input field will not allow a value that is greater than the one specified by this attribute, and it will call the function (if any) specified by the "onMaxFails" attribute. |
 | **min** | number | 0 | If a value to this attribute is provided and it's greater than zero, any value will be allowed in the input field, but in case it's lower than the one specified by this attribute, it will call the function (if any) specified by the "onMinFails" attribute. |
