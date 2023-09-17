@@ -1,49 +1,11 @@
 import React, { Ref, forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react"
+import CurrencyFieldProps from "../types/CurrencyFieldProps"
 import LocaleNumber from "../utilities/LocaleNumber"
-
-type CurrencyFieldProps = {
-    // Input attributes
-    ref?: Ref<HTMLInputElement>,
-    id?: string,
-    name?: string,
-    value?: string | number,
-    placeholder?: string,
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void,
-    onPaste?: (e: React.ClipboardEvent<HTMLInputElement>) => void,
-    className?: string,
-
-    // Custom attributes
-    locale?: string,
-    currency?: string,
-    decimals?: number,
-    max?: number,
-    min?: number,
-    disableAutoCurrencyPositioning?: boolean,
-    numericalValue?: number,
-    onNumericalChange?: (newValue: number) => void,
-    onMaxFails?: (newValue: boolean) => void,
-    onMinFails?: (newValue: boolean) => void
-}
-
-const setCurrencyLabelPosition = (inputField?: HTMLInputElement) => {
-    if (!inputField || inputField.hasAttribute('data-currency-positioned')) return;
-
-    inputField.setAttribute('data-currency-positioned', 'true');
-
-    const wrapper = inputField.parentElement as HTMLElement;
-    const currency = wrapper!.firstElementChild as HTMLElement;
-    const currencyOffset = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 2;
-    const inputPadding = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 3;
-
-    wrapper.style.marginLeft = `-${currency!.offsetWidth}px`;
-    currency.style.display = 'inline-block';
-    currency.style.transform = `translateX(${currencyOffset}px)`;
-    inputField.style.paddingLeft = `${inputPadding}px`;
-}
+import { setSymbolPositioningOptimizations, getSymbolTag } from "../utilities/Symbol"
 
 const CurrencyField = forwardRef(({
-        currency = '$',
+        symbol = '$',
+        symbolPosition = 'start',
         decimals = 2,
         max = 999999999,
         min = 0,
@@ -68,7 +30,7 @@ const CurrencyField = forwardRef(({
     useEffect(() => {
         if (!inputField.current) return;
 
-        !disableAutoCurrencyPositioning && setCurrencyLabelPosition(inputField.current);
+        !disableAutoCurrencyPositioning && setSymbolPositioningOptimizations(inputField.current, symbolPosition);
 
         if (props.value) {
             inputField.current.value = inputField.current.value.length
@@ -215,10 +177,12 @@ const CurrencyField = forwardRef(({
         }
     }
 
+    const symbolTag = getSymbolTag({symbol, ...props});
+
     return (
         <>
             <div className="react-currency-field-wrapper">
-                <span>{currency}</span>
+                {symbolPosition === 'start' && symbolTag}
                 <input type="text"
                     ref={inputField}
                     id={props.id}
@@ -231,6 +195,7 @@ const CurrencyField = forwardRef(({
                     onPaste={onPasteFunction}
                     className={props.className}
                 />
+                {symbolPosition === 'end' && symbolTag}
             </div>
         </>
     )
