@@ -34,12 +34,19 @@ a:hover {
     border-radius: 15px;
 }
 
-input {
+.react-currency-field-wrapper {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.react-currency-field-wrapper input {
     max-width: 135px;
     font-size: 1rem;
     padding: 5px;
     border: 2px solid gray;
     border-radius: 5px;
+    z-index: 2;
+    background-color: transparent;
 }
 
 .flag {
