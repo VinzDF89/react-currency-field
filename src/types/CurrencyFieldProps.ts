@@ -1,6 +1,6 @@
 import { Ref } from "react";
 
-type CurrencyFieldProps = {
+export type CurrencyFieldProps = {
     // Input attributes
     ref?: Ref<HTMLInputElement>,
     id?: string,
@@ -29,5 +29,3 @@ type CurrencyFieldProps = {
     onMaxFails?: (newValue: boolean) => void,
     onMinFails?: (newValue: boolean) => void
 }
-
-export default CurrencyFieldProps;

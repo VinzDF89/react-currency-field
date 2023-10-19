@@ -1,5 +1,5 @@
 import React, { Ref, forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react"
-import CurrencyFieldProps from "../types/CurrencyFieldProps"
+import { CurrencyFieldProps } from "../types/CurrencyFieldProps"
 import LocaleNumber from "../utilities/LocaleNumber"
 import { setSymbolPositioningOptimizations, getSymbolTag } from "../utilities/Symbol"
 

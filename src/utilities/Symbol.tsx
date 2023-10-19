@@ -1,4 +1,4 @@
-import CurrencyFieldProps from "../types/CurrencyFieldProps";
+import { CurrencyFieldProps } from "../types/CurrencyFieldProps";
 
 const setSymbolPositioningOptimizations = (inputField: HTMLInputElement, position: string): void => {
     if (!inputField || inputField.hasAttribute('data-symbol-positioned')) return;
