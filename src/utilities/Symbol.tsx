@@ -1,23 +1,29 @@
 import CurrencyFieldProps from "../types/CurrencyFieldProps";
 
 const setSymbolPositioningOptimizations = (inputField: HTMLInputElement, position: string): void => {
-    if (!inputField || inputField.hasAttribute('data-currency-positioned')) return;
+    if (!inputField || inputField.hasAttribute('data-symbol-positioned')) return;
 
-    inputField.setAttribute('data-currency-positioned', 'true');
+    inputField.setAttribute('data-symbol-positioned', 'true');
 
     const wrapper = inputField.parentElement as HTMLElement;
     const currency = wrapper!.querySelector('span') as HTMLElement;
-    const currencyOffset = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 2;
     const inputPadding = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 3;
 
-    currency.style.display = 'inline-block';
+    wrapper.style.position = 'relative';
+    wrapper.style.display = 'inline-flex';
+
+    inputField.style.boxSizing = 'border-box';
+
+    currency.style.display = 'flex';
+    currency.style.alignItems = 'center';
+    currency.style.position = 'absolute';
+    currency.style.height = '100%';
     
     if (position === 'start') {
-        wrapper.style.marginLeft = `-${currency!.offsetWidth}px`;
-        currency.style.transform = `translateX(${currencyOffset}px)`;
+        currency.style.left = `10px`;
         inputField.style.paddingLeft = `${inputPadding}px`;
     } else if (position === 'end') {
-        currency.style.transform = `translateX(-${currencyOffset}px)`;
+        currency.style.right = `10px`;
         inputField.style.paddingRight = `${inputPadding}px`;
     }
 }
