@@ -16,17 +16,23 @@ const CurrencyField = forwardRef(({
     const inputField = useRef<HTMLInputElement>(null);
     const [inputValue, setInputValue] = useState<string>(props.value?.toString() ?? '');
     const prevPosition = useRef<number>(0);
+    const currentPosition = useRef<number>(0);
 
     const preventFormatting = useRef<boolean>(false);
     const isPasted = useRef<boolean>(false);
-    const [forceCursor, setForceCursor] = useState<boolean>(false);
-    useImperativeHandle(ref, () => inputField.current as HTMLInputElement);
 
     const locale = new LocaleNumber(props.locale);
     const decimalSeparator = locale.getDecimalSeparator();
 
-    // Formats the initial number given to the component and triggers and onInput event to complete the update
-    // and checks the other attributes
+    useImperativeHandle(ref, () => inputField.current as HTMLInputElement);
+
+    // Forces the cursor to keep the same position or shift it by a number
+    const shiftCursor = (position: number, offset = 0) => {
+        inputField.current!.selectionStart = inputField.current!.selectionEnd = position - offset;
+    }
+
+    // Formats the initial number passed to the component and triggers the onInput event to complete the update
+    // and checks the other attributes, among which the one related to the automatic symbol positioning
     useEffect(() => {
         if (!inputField.current) return;
 
@@ -43,13 +49,6 @@ const CurrencyField = forwardRef(({
 
         max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
     }, [])
-
-    // Whenever "forceCursor" changes, a new setting of the keyboard cursor should be made
-    useEffect(() => {
-        if (!inputField.current) return;
-
-        inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
-    }, [forceCursor])
 
     const onPasteFunction = (e: React.ClipboardEvent<HTMLInputElement>) => {
         if (!inputField.current) return;
@@ -78,6 +77,8 @@ const CurrencyField = forwardRef(({
 
         if (!preventFormatting.current && e.key === decimalSeparator) {
             e.preventDefault();
+        } else {
+            prevPosition.current = inputField.current.selectionStart ?? 0;
         }
     }
 
@@ -97,19 +98,19 @@ const CurrencyField = forwardRef(({
     const onInputFunction = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!inputField.current) return;
 
-        prevPosition.current = inputField.current.selectionStart ?? 0;
+        currentPosition.current = inputField.current.selectionStart ?? 0;
 
         // Checks whether the new number exceeds the maximum limit
         const newNumber = locale.cleanNumber(inputField.current.value);
         if (max > min && newNumber > max) {
             props.onMaxFails && props.onMaxFails(true);
 
-            setForceCursor(!forceCursor);
+            shiftCursor(currentPosition.current);
 
-            prevPosition.current = prevPosition.current - 1;
+            currentPosition.current = currentPosition.current - 1;
 
             inputField.current.value = inputValue ?? ''
-            inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
+            inputField.current.selectionStart = inputField.current.selectionEnd = currentPosition.current;
 
             return;
         } else {
@@ -144,7 +145,6 @@ const CurrencyField = forwardRef(({
         // Formats the new value string as currency
         inputField.current.value = inputField.current.value.length
             ? locale.getFormattedValue(newNumber, decimals) : '';
-        
 
         // Calculates the difference between previous and next value string
         const prevOffset = inputValue ? inputValue.length : 0;
@@ -167,13 +167,13 @@ const CurrencyField = forwardRef(({
         }
 
         // Adjusts keyboard's cursor in the field
-        if (Math.abs(difference) === 2 && prevPosition.current - 1 > 0) {
-            const newPosition = difference > 0 ? prevPosition.current - 1 : prevPosition.current + 1;
+        if (Math.abs(difference) === 2 && currentPosition.current - 1 > 0) {
+            const newPosition = difference > 0 ? currentPosition.current - 1 : currentPosition.current + 1;
             inputField.current.selectionStart = inputField.current.selectionEnd = newPosition;
-        } else if (difference === 0 && inputValue != inputField.current.value && inputValue.length > 1) {
-            inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current - 1;
+        } else if (prevPosition.current > currentPosition.current) {
+            shiftCursor(prevPosition.current, 1);
         } else {
-            inputField.current.selectionStart = inputField.current.selectionEnd = prevPosition.current;
+            shiftCursor(currentPosition.current, difference === 0 ? 1 : 0);
         }
     }
 
