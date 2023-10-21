@@ -5,11 +5,13 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
-## 1.1.0 minor release notes
-- Added the more generic "symbol" attribute to use instead of "currency", which is now marked as deprecated.
-- Added the new "symbolPosition" attribute, which allows to move the symbol after the field if set to "end" (default is "start").
-- Small optimization on keyboard cursor's positioning.
-- Code refactoring.
+## 1.2.0 minor release notes
+- Automatic symbol positioning optimized for input fields with full width.
+- Symbol now cannot be selected so it doesn't interfere with the input field anymore.
+- When typing non-allowed characters (such as letters), the cursor will now keep its position.
+- If using only "numericalValue" instead of "value" attribute, or if using "value" and passing it a correct formatted string value, the input field will not trigger an additional rendering on initialization anymore (if you don't need to get the formatted value, it's always recommended to use "numericalValue" attribute).
+- When deleting the first digit, the rest of the number is now kept in order to not lose it.
+- Several other small changes and improvements + a light refactoring of the code.
 
 ## Installation
 ```
@@ -76,3 +78,10 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 | **onNumericalChange** | (newValue: number) => void | undefined | Whenever the user interacts with the input field, the function passed to this attribute will be called and it will contain a parameter representing the value of the field but of number type. |
 | **onMaxFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user tries to set a number greater than the one specified by the "max" attribute. |
 | **onMinFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user interacts with the input field, and its value is lower than the one specified by the "min" attribute. |
+
+## Previous releases
+### 1.1.0 minor release notes
+- Added the more generic "symbol" attribute to use instead of "currency", which is now marked as deprecated.
+- Added the new "symbolPosition" attribute, which allows to move the symbol after the field if set to "end" (default is "start").
+- Small optimization on keyboard cursor's positioning.
+- Code refactoring.
