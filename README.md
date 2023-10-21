@@ -5,6 +5,9 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
+## 1.2.1 patch release notes
+- Fixed vulnerability from the Babel dependency.
+
 ## 1.2.0 minor release notes
 - Automatic symbol positioning optimized for input fields with full width.
 - Symbol now cannot be selected so it doesn't interfere with the input field anymore.
