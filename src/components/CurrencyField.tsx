@@ -27,8 +27,16 @@ const CurrencyField = forwardRef(({
     useImperativeHandle(ref, () => inputField.current as HTMLInputElement);
 
     // Forces the cursor to keep the same position or shift it by a number
-    const shiftCursor = (position: number, offset = 0) => {
-        inputField.current!.selectionStart = inputField.current!.selectionEnd = position - offset;
+    const shiftCursor = (position: number, offset = 0) => inputField.current!.selectionStart = inputField.current!.selectionEnd = position - offset;
+
+    const updateStates = (e: React.ChangeEvent<HTMLInputElement> | null = null) => {
+        if (!inputField.current) return;
+
+        // Updates the value bound to the field
+        e && props.onChange && props.onChange(e);
+
+        // Updates the numerical value
+        props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
     }
 
     // Formats the initial number passed to the component and triggers the onInput event to complete the update
@@ -39,12 +47,15 @@ const CurrencyField = forwardRef(({
         !disableAutoCurrencyPositioning && setSymbolPositioningOptimizations(inputField.current, symbolPosition);
 
         if (props.value) {
-            inputField.current.value = inputField.current.value.length
-                ? props.value.toString() : '';
-            inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
+            const formattedValue = locale.getFormattedValue(locale.cleanNumber(props.value), decimals);
+            if (formattedValue != props.value) {
+                inputField.current.value = formattedValue;
+                
+                // Causes an additional initial rendering
+                inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
+            }
         } else if (props.numericalValue) {
-            inputField.current.value = props.numericalValue.toString();
-            inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
+            inputField.current.value = locale.getFormattedValue(props.numericalValue, decimals);
         }
 
         max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
@@ -130,14 +141,8 @@ const CurrencyField = forwardRef(({
                 inputField.current.value = integerNumber + decimalSeparator + newNumberDecimals.slice(0, -1);
             }
 
-            // Update the internal value
             setInputValue(inputField.current.value);
-
-            // Updates the value bound to the field, or change the previous position
-            props.onChange && props.onChange(e);
-
-            // Updates the numerical value
-            props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
+            updateStates(e);
 
             return;
         }
@@ -154,11 +159,7 @@ const CurrencyField = forwardRef(({
         // Update the internal value
         setInputValue(inputField.current.value);
 
-        // Updates the value bound to the field, or manually updates the new previous value string
-        props.onChange && props.onChange(e);
-
-        // Updates the numerical value
-        props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
+        updateStates(e);
 
         if (isPasted.current) {
             isPasted.current = false;
