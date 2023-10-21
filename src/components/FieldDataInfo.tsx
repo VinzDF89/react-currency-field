@@ -1,7 +1,7 @@
 import LocaleNumber from "../utilities/LocaleNumber"
 
 type FieldDataInfoProps = {
-    amount: string,
+    amount: string | number,
     numericalAmount: number,
     maxLimit: number,
     minLimit: number,

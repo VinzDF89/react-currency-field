@@ -49,7 +49,7 @@ function App() {
                     </span>
                 </div>
                 <FieldDataInfo
-                    amount={amount.toString()}
+                    amount={amount}
                     numericalAmount={numericalAmount}
                     maxLimit={maxLimit}
                     minLimit={minLimit}
