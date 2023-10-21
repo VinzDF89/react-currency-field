@@ -174,7 +174,7 @@ const CurrencyField = forwardRef(({
         } else if (prevPosition.current > currentPosition.current) {
             shiftCursor(prevPosition.current, 1);
         } else {
-            shiftCursor(currentPosition.current, difference === 0 ? 1 : 0);
+            shiftCursor(currentPosition.current, (difference === 0 && inputValue.length > 1) ? 1 : 0);
         }
     }
 
