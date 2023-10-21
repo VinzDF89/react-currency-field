@@ -64,7 +64,7 @@ describe('Testing CurrencyField controlled by App', () => {
         expect(inputField).toHaveValue('1,000.12');
 
         await user.keyboard('[Backspace]');
-        expect(inputField).toHaveValue('0.12');
+        expect(inputField).toHaveValue(',000.12');
     })
 
     // 5. Max value exceeded check
