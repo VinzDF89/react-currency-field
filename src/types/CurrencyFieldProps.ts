@@ -23,7 +23,11 @@ export type CurrencyFieldProps = {
     decimals?: number,
     max?: number,
     min?: number,
+    /**
+     * @deprecated Use {@link CurrencyFieldProps.disableAutoSymbolPositioning} instead.
+     */
     disableAutoCurrencyPositioning?: boolean,
+    disableAutoSymbolPositioning?: boolean,
     numericalValue?: number,
     onNumericalChange?: (newValue: number) => void,
     onMaxFails?: (newValue: boolean) => void,

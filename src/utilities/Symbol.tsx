@@ -7,7 +7,7 @@ const setSymbolPositioningOptimizations = (inputField: HTMLInputElement, positio
 
     const wrapper = inputField.parentElement as HTMLElement;
     const currency = wrapper!.querySelector('span') as HTMLElement;
-    const inputPadding = currency!.offsetWidth + Number(window.getComputedStyle(inputField).getPropertyValue('padding-left').slice(0, -2)) * 3;
+    const inputPadding = currency!.offsetWidth + 15;
 
     wrapper.style.position = 'relative';
     wrapper.style.display = 'inline-flex';

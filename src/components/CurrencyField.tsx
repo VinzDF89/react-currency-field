@@ -10,6 +10,7 @@ const CurrencyField = forwardRef(({
         max = 999999999,
         min = 0,
         disableAutoCurrencyPositioning = false,
+        disableAutoSymbolPositioning = false,
         ...props
     }: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
 
@@ -44,7 +45,7 @@ const CurrencyField = forwardRef(({
     useEffect(() => {
         if (!inputField.current) return;
 
-        !disableAutoCurrencyPositioning && setSymbolPositioningOptimizations(inputField.current, symbolPosition);
+        !disableAutoSymbolPositioning && !disableAutoCurrencyPositioning && setSymbolPositioningOptimizations(inputField.current, symbolPosition);
 
         if (props.value) {
             const formattedValue = locale.getFormattedValue(locale.cleanNumber(props.value), decimals);

@@ -5,16 +5,9 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
-## 1.2.1 patch release notes
-- Fixed vulnerability from the Babel dependency.
-
-## 1.2.0 minor release notes
-- Automatic symbol positioning optimized for input fields with full width.
-- Symbol now cannot be selected so it doesn't interfere with the input field anymore.
-- When typing non-allowed characters (such as letters), the cursor will now keep its position.
-- If using only "numericalValue" instead of "value" attribute, or if using "value" and passing it a correct formatted string value, the input field will not trigger an additional rendering on initialization anymore (if you don't need to get the formatted value, it's always recommended to use "numericalValue" attribute).
-- When deleting the first digit, the rest of the number is now kept in order to not lose it.
-- Several other small changes and improvements + a light refactoring of the code.
+## 1.3.0 minor release notes
+- Optimized the automatic setting of the input's padding where the symbol is placed.
+- Added the more generic "disableAutoSymbolPositioning" attribute to use instead of "disableAutoCurrencyPositioning", which is now marked as deprecated.
 
 ## Installation
 ```
@@ -76,13 +69,23 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 | **decimals** | number | 2 | Number of decimals allowed. |
 | **max** | number | 999999999 | The input field will not allow a value that is greater than the one specified by this attribute, and it will call the function (if any) specified by the "onMaxFails" attribute. |
 | **min** | number | 0 | If a value to this attribute is provided and it's greater than zero, any value will be allowed in the input field, but in case it's lower than the one specified by this attribute, it will call the function (if any) specified by the "onMinFails" attribute. |
-| **disableAutoCurrencyPositioning** | boolean | false | By default the currency symbol will be translated to the right, so that it will be graphically shown up like it is inside the input field. If set to true, the chosen currency symbol will not be moved, so that the developer would have more freedom to style the component. |
+| **disableAutoSymbolPositioning** | boolean | false | By default the currency symbol will be translated to the right, so that it will be graphically shown up as if it were inside the input field (at the beginning or at the end depending on the "symbolPosition" attribute). If set to true, the chosen currency symbol will not be moved, so that the developer would have more freedom to style the component in a different and more precise way in order to make it more suitable and consistent with their graphics. |
 | **numericalValue** | number | undefined | Similar to the "value" attribute, it can be used to set a default value, but this has to carry only a number type value |
 | **onNumericalChange** | (newValue: number) => void | undefined | Whenever the user interacts with the input field, the function passed to this attribute will be called and it will contain a parameter representing the value of the field but of number type. |
 | **onMaxFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user tries to set a number greater than the one specified by the "max" attribute. |
 | **onMinFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user interacts with the input field, and its value is lower than the one specified by the "min" attribute. |
 
 ## Previous releases
+## 1.2.1 patch release notes
+- Fixed vulnerability from the Babel dependency.
+
+## 1.2.0 minor release notes
+- Automatic symbol positioning optimized for input fields with full width.
+- Symbol now cannot be selected so it doesn't interfere with the input field anymore.
+- When typing non-allowed characters (such as letters), the cursor will now keep its position.
+- If using only "numericalValue" instead of "value" attribute, or if using "value" and passing it a correct formatted string value, the input field will not trigger an additional rendering on initialization anymore (if you don't need to get the formatted value, it's always recommended to use "numericalValue" attribute).
+- When deleting the first digit, the rest of the number is now kept in order to not lose it.
+- Several other small changes and improvements + a light refactoring of the code.
 ### 1.1.0 minor release notes
 - Added the more generic "symbol" attribute to use instead of "currency", which is now marked as deprecated.
 - Added the new "symbolPosition" attribute, which allows to move the symbol after the field if set to "end" (default is "start").
