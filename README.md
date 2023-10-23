@@ -5,6 +5,9 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
+## 1.3.1 patch release notes
+- Optimized the cursor position for fields using the "numericalValue" attribute instead of "value"
+
 ## 1.3.0 minor release notes
 - Optimized the automatic setting of the input's padding where the symbol is placed.
 - Added the more generic "disableAutoSymbolPositioning" attribute to use instead of "disableAutoCurrencyPositioning", which is now marked as deprecated.
