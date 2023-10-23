@@ -57,6 +57,7 @@ const CurrencyField = forwardRef(({
             }
         } else if (props.numericalValue) {
             inputField.current.value = locale.getFormattedValue(props.numericalValue, decimals);
+            setInputValue(inputField.current.value);
         }
 
         max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
