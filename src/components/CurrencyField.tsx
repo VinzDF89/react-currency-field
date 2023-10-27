@@ -80,7 +80,10 @@ const CurrencyField = forwardRef(({
 
         preventFormatting.current = (
             (
-                (e.key === decimalSeparator && decimalSepPos === -1 || !isNaN(Number(e.key)) && decimalSepPos > -1 && selectionStart > decimalSepPos)
+                (
+                    (e.key === decimalSeparator && decimalSepPos === -1) 
+                    || ((!isNaN(Number(e.key)) || e.key == 'Backspace' || e.key == 'Delete') && decimalSepPos > -1 && selectionStart > decimalSepPos)
+                )
                 && decimals > 0
                 && selectionStart === inputField.current.value.length
                 && inputField.current.value.length > 0

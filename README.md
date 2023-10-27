@@ -5,8 +5,8 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
-## 1.3.1 patch release notes
-- Optimized the cursor position for fields using the "numericalValue" attribute instead of "value"
+## 1.3.2 minor release notes
+- Optimized the value's formatting when deleting the decimal part. Now the decimal separator is kept until it is explicitly removed.
 
 ## 1.3.0 minor release notes
 - Optimized the automatic setting of the input's padding where the symbol is placed.
@@ -79,6 +79,10 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 | **onMinFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user interacts with the input field, and its value is lower than the one specified by the "min" attribute. |
 
 ## Previous releases
+
+## 1.3.1 patch release notes
+- Optimized the cursor position for fields using the "numericalValue" attribute instead of "value"
+
 ## 1.2.1 patch release notes
 - Fixed vulnerability from the Babel dependency.
 
