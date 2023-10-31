@@ -107,6 +107,10 @@ const CurrencyField = forwardRef(({
             props.onMaxFails && props.onMaxFails(false);
         }
 
+        if (!inputField.current.value.length) {
+            inputField.current.value = '0';
+        }
+
         props.onBlur && props.onBlur(e);
     }
 
