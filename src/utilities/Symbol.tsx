@@ -1,9 +1,7 @@
 import { CurrencyFieldProps } from "../types/CurrencyFieldProps";
 
 const setSymbolPositioningOptimizations = (inputField: HTMLInputElement, position: string): void => {
-    if (!inputField || inputField.hasAttribute('data-symbol-positioned')) return;
-
-    inputField.setAttribute('data-symbol-positioned', 'true');
+    if (!inputField) return;
 
     const wrapper = inputField.parentElement as HTMLElement;
     const currency = wrapper!.querySelector('span') as HTMLElement;
@@ -21,9 +19,13 @@ const setSymbolPositioningOptimizations = (inputField: HTMLInputElement, positio
     
     if (position === 'start') {
         currency.style.left = `10px`;
+        currency.style.right = '';
         inputField.style.paddingLeft = `${inputPadding}px`;
+        inputField.style.paddingRight = '';
     } else if (position === 'end') {
+        currency.style.left = '';
         currency.style.right = `10px`;
+        inputField.style.paddingLeft = '';
         inputField.style.paddingRight = `${inputPadding}px`;
     }
 }

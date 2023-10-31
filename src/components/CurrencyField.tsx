@@ -41,11 +41,8 @@ const CurrencyField = forwardRef(({
     }
 
     // Formats the initial number passed to the component and triggers the onInput event to complete the update
-    // and checks the other attributes, among which the one related to the automatic symbol positioning
     useEffect(() => {
         if (!inputField.current) return;
-
-        !disableAutoSymbolPositioning && !disableAutoCurrencyPositioning && setSymbolPositioningOptimizations(inputField.current, symbolPosition);
 
         if (props.value) {
             const formattedValue = locale.getFormattedValue(locale.cleanNumber(props.value), decimals);
@@ -62,6 +59,13 @@ const CurrencyField = forwardRef(({
 
         max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
     }, [])
+
+    // If enabled, it executes the automatic symbol positioning logic
+    useEffect(() => {
+        if (!inputField.current) return;
+
+        !disableAutoSymbolPositioning && !disableAutoCurrencyPositioning && setSymbolPositioningOptimizations(inputField.current, symbolPosition);
+    }, [disableAutoSymbolPositioning, disableAutoCurrencyPositioning, symbolPosition])
 
     const onPasteFunction = (e: React.ClipboardEvent<HTMLInputElement>) => {
         if (!inputField.current) return;
