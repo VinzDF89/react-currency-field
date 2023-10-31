@@ -7,7 +7,7 @@
     "field",
     "react"
   ],
-  "version": "1.3.2",
+  "version": "1.4.0",
   "type": "module",
   "repository": "https://github.com/VinzDF89/react-currency-field",
   "scripts": {
