@@ -5,12 +5,9 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
-## 1.3.2 minor release notes
-- Optimized the value's formatting when deleting the decimal part. Now the decimal separator is kept until it is explicitly removed.
-
-## 1.3.0 minor release notes
-- Optimized the automatic setting of the input's padding where the symbol is placed.
-- Added the more generic "disableAutoSymbolPositioning" attribute to use instead of "disableAutoCurrencyPositioning", which is now marked as deprecated.
+## 1.4.0 minor release notes
+- On blur, the input value is set to zero if empty.
+- Automatic symbol positioning logic optimized. Now the symbol position can be changed without graphical issues.
 
 ## Installation
 ```
@@ -23,7 +20,7 @@ A simple usage of this component would be:
 
 ```ts
 import { useState } from 'react'
-import CurrencyField from './components/CurrencyField'
+import CurrencyField from "@vinzdf89/react-currency-field"
 
 function App() {
     const initialAmount = 5000;
@@ -80,8 +77,15 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 
 ## Previous releases
 
+## 1.3.2 minor release notes
+- Optimized the value's formatting when deleting the decimal part. Now the decimal separator is kept until it is explicitly removed.
+
 ## 1.3.1 patch release notes
 - Optimized the cursor position for fields using the "numericalValue" attribute instead of "value"
+
+## 1.3.0 minor release notes
+- Optimized the automatic setting of the input's padding where the symbol is placed.
+- Added the more generic "disableAutoSymbolPositioning" attribute to use instead of "disableAutoCurrencyPositioning", which is now marked as deprecated.
 
 ## 1.2.1 patch release notes
 - Fixed vulnerability from the Babel dependency.
@@ -93,7 +97,8 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 - If using only "numericalValue" instead of "value" attribute, or if using "value" and passing it a correct formatted string value, the input field will not trigger an additional rendering on initialization anymore (if you don't need to get the formatted value, it's always recommended to use "numericalValue" attribute).
 - When deleting the first digit, the rest of the number is now kept in order to not lose it.
 - Several other small changes and improvements + a light refactoring of the code.
-### 1.1.0 minor release notes
+
+## 1.1.0 minor release notes
 - Added the more generic "symbol" attribute to use instead of "currency", which is now marked as deprecated.
 - Added the new "symbolPosition" attribute, which allows to move the symbol after the field if set to "end" (default is "start").
 - Small optimization on keyboard cursor's positioning.
