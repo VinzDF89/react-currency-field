@@ -11,6 +11,7 @@ const CurrencyField = forwardRef(({
         min = 0,
         disableAutoCurrencyPositioning = false,
         disableAutoSymbolPositioning = false,
+        numericalValue = 0,
         ...props
     }: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
 
@@ -42,24 +43,22 @@ const CurrencyField = forwardRef(({
 
     // Formats the initial number passed to the component and triggers the onInput event to complete the update
     useEffect(() => {
-        if (!inputField.current) return;
+        const formattedValue = locale.getFormattedValue(props.value ? locale.cleanNumber(props.value) : numericalValue, decimals);
+
+        if (!inputField.current || (props.value && props.value == formattedValue)) return;
+        
+        inputField.current.value = formattedValue;
 
         if (props.value) {
-            const formattedValue = locale.getFormattedValue(locale.cleanNumber(props.value), decimals);
-            if (formattedValue != props.value) {
-                inputField.current.value = formattedValue;
-                
-                // Causes an additional initial rendering
-                inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-        } else if (props.numericalValue) {
-            inputField.current.value = locale.getFormattedValue(props.numericalValue, decimals);
-            setInputValue(inputField.current.value);
+            // Causes an additional initial rendering
+            inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
+        } else {
+            setInputValue(formattedValue);
         }
-
+        
         max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
     // eslint-disable-next-line
-    }, [props.value])
+    }, [props.value, numericalValue])
 
     // If enabled, it executes the automatic symbol positioning logic
     useEffect(() => {
