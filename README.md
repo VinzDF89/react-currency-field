@@ -5,9 +5,9 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
-## 1.4.0 minor release notes
-- On blur, the input value is set to zero if empty.
-- Automatic symbol positioning logic optimized. Now the symbol position can be changed without graphical issues.
+## 1.4.2 patch release notes
+- Fixed the problem that prevented updating the field value by externally calling the set function for the "numericalValue" attribute.
+- "numericalValue" attribute marked as deprecated.
 
 ## Installation
 ```
@@ -70,12 +70,18 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 | **max** | number | 999999999 | The input field will not allow a value that is greater than the one specified by this attribute, and it will call the function (if any) specified by the "onMaxFails" attribute. |
 | **min** | number | 0 | If a value to this attribute is provided and it's greater than zero, any value will be allowed in the input field, but in case it's lower than the one specified by this attribute, it will call the function (if any) specified by the "onMinFails" attribute. |
 | **disableAutoSymbolPositioning** | boolean | false | By default the currency symbol will be translated to the right, so that it will be graphically shown up as if it were inside the input field (at the beginning or at the end depending on the "symbolPosition" attribute). If set to true, the chosen currency symbol will not be moved, so that the developer would have more freedom to style the component in a different and more precise way in order to make it more suitable and consistent with their graphics. |
-| **numericalValue** | number | undefined | Similar to the "value" attribute, it can be used to set a default value, but this has to carry only a number type value |
 | **onNumericalChange** | (newValue: number) => void | undefined | Whenever the user interacts with the input field, the function passed to this attribute will be called and it will contain a parameter representing the value of the field but of number type. |
 | **onMaxFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user tries to set a number greater than the one specified by the "max" attribute. |
 | **onMinFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user interacts with the input field, and its value is lower than the one specified by the "min" attribute. |
 
 ## Previous releases
+
+## 1.4.1 patch release notes
+- Fixed the problem that prevented updating the field value by externally calling the set function.
+
+## 1.4.0 minor release notes
+- On blur, the input value is set to zero if empty.
+- Automatic symbol positioning logic optimized. Now the symbol position can be changed without graphical issues.
 
 ## 1.3.2 minor release notes
 - Optimized the value's formatting when deleting the decimal part. Now the decimal separator is kept until it is explicitly removed.
