@@ -28,6 +28,9 @@ export type CurrencyFieldProps = {
      */
     disableAutoCurrencyPositioning?: boolean,
     disableAutoSymbolPositioning?: boolean,
+    /**
+     * @deprecated Use {@link CurrencyFieldProps.value} instead.
+     */
     numericalValue?: number,
     onNumericalChange?: (newValue: number) => void,
     onMaxFails?: (newValue: boolean) => void,
