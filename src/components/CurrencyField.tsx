@@ -58,7 +58,8 @@ const CurrencyField = forwardRef(({
         }
 
         max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
-    }, [])
+    // eslint-disable-next-line
+    }, [props.value])
 
     // If enabled, it executes the automatic symbol positioning logic
     useEffect(() => {

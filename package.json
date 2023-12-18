@@ -1,7 +1,11 @@
 {
   "name": "@vinzdf89/react-currency-field",
   "description": "React Currency Field",
-  "author": "Vincenzo De Falco | www.vincenzodefalco.com",
+  "author": {
+    "name": "Vincenzo De Falco",
+    "email": "info@vincenzodefalco.com",
+    "url": "https://www.vincenzodefalco.com/"
+  },
   "keywords": [
     "currency",
     "field",
@@ -9,7 +13,11 @@
   ],
   "version": "1.4.0",
   "type": "module",
-  "repository": "https://github.com/VinzDF89/react-currency-field",
+  "homepage": "https://github.com/VinzDF89/react-currency-field/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VinzDF89/react-currency-field.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
