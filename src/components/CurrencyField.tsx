@@ -15,8 +15,9 @@ const CurrencyField = forwardRef(({
         ...props
     }: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
 
+    const isInitialized = useRef<boolean>(false);
     const inputField = useRef<HTMLInputElement>(null);
-    const [inputValue, setInputValue] = useState<string>(props.value?.toString() ?? '');
+    const [inputValue, setInputValue] = useState<string>(props.value?.toString() ?? numericalValue.toString());
     const prevPosition = useRef<number>(0);
     const currentPosition = useRef<number>(0);
 
@@ -43,20 +44,23 @@ const CurrencyField = forwardRef(({
 
     // Formats the initial number passed to the component and triggers the onInput event to complete the update
     useEffect(() => {
-        const formattedValue = locale.getFormattedValue(props.value ? locale.cleanNumber(props.value) : numericalValue, decimals);
+        max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
+
+        let formattedValue = locale.getFormattedValue(props.value ? locale.cleanNumber(props.value) : numericalValue, decimals);
+        if (preventFormatting.current && formattedValue === '0') formattedValue = '';
 
         if (!inputField.current || (props.value && props.value == formattedValue)) return;
-        
-        inputField.current.value = formattedValue;
 
-        if (props.value) {
-            // Causes an additional initial rendering
+        props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
+
+        if (!isInitialized.current) {
+            isInitialized.current = true;
             inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
-        } else {
+        } else if (!preventFormatting.current) {
+            inputField.current.value = formattedValue;
+
             setInputValue(formattedValue);
         }
-        
-        max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
     // eslint-disable-next-line
     }, [props.value, numericalValue])
 

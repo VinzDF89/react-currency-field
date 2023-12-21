@@ -5,9 +5,8 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
-## 1.4.2 patch release notes
-- Fixed the problem that prevented updating the field value by externally calling the set function for the "numericalValue" attribute.
-- "numericalValue" attribute marked as deprecated.
+## 1.4.3 patch release notes
+- Fixed the wrong positioning and the formatting of the value that was occurring in specific cases.
 
 ## Installation
 ```
@@ -75,6 +74,10 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 | **onMinFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user interacts with the input field, and its value is lower than the one specified by the "min" attribute. |
 
 ## Previous releases
+
+## 1.4.2 patch release notes
+- Fixed the problem that prevented updating the field value by externally calling the set function for the "numericalValue" attribute.
+- "numericalValue" attribute marked as deprecated.
 
 ## 1.4.1 patch release notes
 - Fixed the problem that prevented updating the field value by externally calling the set function.

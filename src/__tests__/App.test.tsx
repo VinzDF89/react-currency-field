@@ -57,11 +57,17 @@ describe('Testing CurrencyField controlled by App', () => {
         await user.keyboard('[Backspace]');
         expect(inputField).toHaveValue('123,000.12');
 
+        inputField.setSelectionRange(3, 3);
+
         await user.keyboard('[Backspace]');
         expect(inputField).toHaveValue('12,000.12');
 
+        inputField.setSelectionRange(2, 2);
+
         await user.keyboard('[Backspace]');
         expect(inputField).toHaveValue('1,000.12');
+
+        inputField.setSelectionRange(1, 1);
 
         await user.keyboard('[Backspace]');
         expect(inputField).toHaveValue(',000.12');
