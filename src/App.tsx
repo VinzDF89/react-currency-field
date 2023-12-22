@@ -37,7 +37,7 @@ function App() {
 
             <div className="main container">
                 <div>
-                    <CurrencyField value={amount} onChange={changeAmount} 
+                    <CurrencyField value={amount} onChange={changeAmount}
                         onNumericalChange={changeNumericalAmount}
                         locale="en-US"
                         max={maxLimit} min={minLimit} onMaxFails={changeMaxLimitExceeded} onMinFails={changeMinLimitNotReached}

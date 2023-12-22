@@ -15,7 +15,6 @@ const CurrencyField = forwardRef(({
         ...props
     }: CurrencyFieldProps, ref: Ref<HTMLInputElement>) => {
 
-    const isInitialized = useRef<boolean>(false);
     const inputField = useRef<HTMLInputElement>(null);
     const [inputValue, setInputValue] = useState<string>(props.value?.toString() ?? numericalValue.toString());
     const prevPosition = useRef<number>(0);
@@ -43,6 +42,7 @@ const CurrencyField = forwardRef(({
     }
 
     // Formats the initial number passed to the component and triggers the onInput event to complete the update
+    // It also ensures that any change made to the value externally by directly changing the state is properly formatted
     useEffect(() => {
         max <= min && console.warn(`CurrencyField: "max" attribute cannot be smaller or equal to "min" attribute (found max: ${max}, min: ${min})`);
 
@@ -52,15 +52,13 @@ const CurrencyField = forwardRef(({
         if (!inputField.current || (props.value && props.value == formattedValue)) return;
 
         props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
-
-        if (!isInitialized.current) {
-            isInitialized.current = true;
-            inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
-        } else if (!preventFormatting.current) {
+        
+        if (!preventFormatting.current) {
             inputField.current.value = formattedValue;
-
             setInputValue(formattedValue);
         }
+
+        props.onChange && inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
     // eslint-disable-next-line
     }, [props.value, numericalValue])
 
