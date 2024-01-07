@@ -5,8 +5,8 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
-## 1.4.4 patch release notes
-- Fixed the formatting of the value when changing it externally (through the "value" attribute).
+## 1.4.5 patch release notes
+- Both numerical and string values are now updated when the value of the "value" attribute is externally modified.
 
 ## Installation
 ```
@@ -74,6 +74,9 @@ A more complex example can be found in the App.tsx file from the [GitHub project
 | **onMinFails** | (newValue: boolean) => void | undefined | If set, the function will be called every time the user interacts with the input field, and its value is lower than the one specified by the "min" attribute. |
 
 ## Previous releases
+
+## 1.4.4 patch release notes
+- Fixed the formatting of the value when changing it externally (through the "value" attribute).
 
 ## 1.4.3 patch release notes
 - Fixed the wrong positioning and the formatting of the value that was occurring in specific cases.
