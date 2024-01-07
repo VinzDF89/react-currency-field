@@ -49,16 +49,18 @@ const CurrencyField = forwardRef(({
         let formattedValue = locale.getFormattedValue(props.value ? locale.cleanNumber(props.value) : numericalValue, decimals);
         if (preventFormatting.current && formattedValue === '0') formattedValue = '';
 
-        if (!inputField.current || (props.value && props.value == formattedValue)) return;
+        if (!inputField.current) return;
 
-        props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(inputField.current.value));
+        props.onNumericalChange && props.onNumericalChange(locale.cleanNumber(formattedValue));
         
         if (!preventFormatting.current) {
             inputField.current.value = formattedValue;
             setInputValue(formattedValue);
         }
 
-        props.onChange && inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
+        if ((props.value && props.value != formattedValue)) {
+            props.onChange && inputField.current.dispatchEvent(new Event('input', { bubbles: true }));
+        }
     // eslint-disable-next-line
     }, [props.value, numericalValue])
 
