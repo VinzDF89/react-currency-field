@@ -8,6 +8,8 @@ export type CurrencyFieldProps = {
     value?: string | number,
     placeholder?: string,
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onMouseDown?: (e: React.MouseEvent<HTMLInputElement>) => void,
+    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void,
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void,
     onPaste?: (e: React.ClipboardEvent<HTMLInputElement>) => void,
     className?: string,

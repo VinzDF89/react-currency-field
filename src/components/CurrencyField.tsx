@@ -105,6 +105,22 @@ const CurrencyField = forwardRef(({
         }
     }
 
+    // Allows to pass a custom onMouseDown event
+    const onMouseDownFunction = (e: React.MouseEvent<HTMLInputElement>) => {
+        if (!inputField.current) return;
+
+        props.onMouseDown && props.onMouseDown(e);
+    }
+
+    // When focused, the value of the field gets entirely selected if the value has only 1 character
+    const onFocusFunction = (e: React.FocusEvent<HTMLInputElement>) => {
+        if (!inputField.current) return;
+
+        if (inputField.current.value.length === 1) inputField.current.select();
+
+        props.onFocus && props.onFocus(e);
+    }
+
     // Checks whether the value has exceeded the maximum value allowed when losing the focus of the field
     // and in case reset the maximum flag
     const onBlurFunction = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -208,6 +224,8 @@ const CurrencyField = forwardRef(({
                     value={inputValue}
                     onInput={onInputFunction}
                     onKeyDown={onKeyDownFunction}
+                    onMouseDown={onMouseDownFunction}
+                    onFocus={onFocusFunction}
                     onBlur={onBlurFunction}
                     onPaste={onPasteFunction}
                     className={props.className}
