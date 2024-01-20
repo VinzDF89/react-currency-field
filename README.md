@@ -5,6 +5,9 @@
 This package provides a React component with an input field to be used in React projects,
 where the value directly typed by the user is automatically formatted in the local or in a specific currency format.
 
+# 1.5.1 patch release notes
+- Fixed security issue by updating vite.
+
 ## 1.5.0 minor release notes
 - Added new attributes "onMouseDown" and "onFocus" to allow the usage of custom event functions.
 - Small optimization: if the value consists of only 1 character, when the input gets the focus the value gets always entirely selected.
