@@ -133,6 +133,11 @@ const CurrencyField = forwardRef(({
 
         if (!inputField.current.value.length) {
             inputField.current.value = '0';
+        } else if (inputField.current.value.includes(decimalSeparator)) {
+            const [integerPart, decimalPart] = inputField.current.value.split(decimalSeparator);
+            if (decimalPart.length === 0 || decimalPart.length < decimals) {
+                setInputValue(integerPart + decimalSeparator + decimalPart + '0'.repeat(decimals - decimalPart.length));
+            }
         }
 
         props.onBlur && props.onBlur(e);
