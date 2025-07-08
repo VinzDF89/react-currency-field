@@ -21,8 +21,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:demo": "tsc && vite build --mode demo",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "preview": "npm run build:demo && npx vite preview --outDir dist-app --port 4173 --host",
     "test": "jest",
     "prepublishOnly": "rm -rf ./dist && npm run build"
   },
